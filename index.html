@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>弹出框组件</title>
+    <link rel="stylesheet" href="css/bootstrap-v3.3.5.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+    <div class="demo" id="demo-bouncingBox">
+        <h2 class="center">单例模式惰性实例化实现的自定义弹出框组件</h2>
+        <dl>
+            <dt>为什么要用惰性实例化：</dt>
+            <dd>单例模式singleton是一种重要色设计模式，单例意味着该类只实例化一个对象，合适应用到登录、提示框等弹出层。<br>主要目的是优化性能和提升用户体验，防止重复点击造成反复实例化。但页面初次加载时不需要立即实例化，点击时才需要，所以在封装类时要做相应处理，实现惰性实例化。<br>注：关闭弹出层后实例对象被注销，这时可以再次实例化</dd>
+            <dt>其它要点：</dt>
+            <dd>闭包与立即执行函数的应用、事件代理绑定、事件绑定的命名空间及其绑定解除、jQuery自定义事件、sea.js模块化以及css3的counter属性</dd>
+        </dl>
+        <section>
+            <h3>避免重复弹出的弹出框(非模态化)</h3>
+            <h6>实例化及参数配置：</h6>
+<pre>
+var NameSpace = NameSpace || {};
+var NameSpace.Joe.bouncingBox=require('./plugins/bouncingBox.js')  //sea.js引入模块
+$(function(){
+    var bouncingBox = NameSpace.Joe.bouncingBox;  //将模块声明为一个变量
+
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML //自定义内容,这里与其标题保持一致
+        ,needMask:false  //不需要遮罩层，默认为true
+    });
+</pre>
+            <button id="bouncingBox-btnLogin1" class="btn">提交</button>
+        </section>
+        <section>
+            <h3>避免重复弹出的弹出框(模态化)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        //needMask:true  //需要遮罩层以实现模态化，可以不设置，因为默认为true
+    });
+</pre>
+            <button id="bouncingBox-btnLogin2" class="btn">提交</button>
+        </section>
+                <section>
+            <h3>避免重复弹出的弹出框(点击页面任意位置关闭)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        ,clickAnywhereToClose:true  //点击页面任意位置关闭
+    });
+</pre>
+            <button id="bouncingBox-btnLogin3" class="btn">提交</button>
+        </section>
+                <section>
+            <h3>避免重复弹出的弹出框(自定义背景色和字体颜色)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        ,bgColor:'#FFF'    //自定义背景色
+        ,fontColor:'#333'  //自定义字体色
+    });
+</pre>
+            <button id="bouncingBox-btnLogin4" class="btn">提交</button>
+        </section>
+                <section>
+            <h3>避免重复弹出的弹出框(带确定按钮)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        ,clickAnywhereToClose:false
+        ,needBtnConfirm:true  //带确定按钮
+    }); 
+</pre>
+            <button id="bouncingBox-btnLogin5" class="btn">提交</button>
+        </section>
+                <section>
+            <h3>避免重复弹出的弹出框(自定义按钮内容)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        ,clickAnywhereToClose:false
+        ,needBtnConfirm:true
+        ,btnConfirmValue:'同意并提交' //自定义按钮文本内容
+    });
+</pre>
+            <button id="bouncingBox-btnLogin6" class="btn">提交</button>
+        </section>
+                <section>
+            <h3>避免重复弹出的弹出框(自定义时间后关闭)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        ,showTime:800      //自定义时间后关闭，默认不关闭
+    });
+</pre>
+            <button id="bouncingBox-btnLogin7" class="btn">提交</button>
+        </section>
+                <section>
+            <h3>避免重复弹出的弹出框(自定义关闭后的淡出时间)</h3>
+            <h6>参数配置：</h6>
+<pre>
+    bouncingBox({
+        content:$(target).prevAll('h3')[0].innerHTML
+        ,fadeOutDuration:0   //自定义关闭后的淡出时间
+        ,needBtnConfirm:true
+        ,btnConfirmValue:'立即消失'
+    });
+</pre>
+            <button id="bouncingBox-btnLogin8" class="btn">提交</button>
+        </section>
+        <section>
+            <h3>避免重复弹出的弹出框(自定义载入DOM元素)</h3>
+            <h6>参数配置：</h6>
+<pre>
+bouncingBox({
+    content:function(){ //自定义内容为一个DOM元素
+        var img=document.createElement('img');
+        img.src='http://img-download.pchome.net/download/1k1/bw/54/oky8k0-1lv4.jpg';
+        img.alt='remote image,test loading!';
+        var imgWrap=document.createElement('div');
+        imgWrap.classList.add('loading');
+        imgWrap.appendChild(img);
+        return imgWrap;   //自定义一个图片并返回其容器元素
+    }
+    ,width:'500px'      //自定义DOM元素宽度
+}); 
+</pre>      
+            <button id="bouncingBox-btnLogin9" class="btn">提交</button>
+        </section>
+        <section>
+            <h4>其它用例待持续扩展...</h4>
+        </section>
+    </div>  
+    <script src="js/lib/sea.js"></script>
+    <script>
+    seajs.config({
+        alias: {
+        "jquery": "./lib/jquery-1.11.3.min",
+        "tools":"./tools.js"
+      }
+    });
+    seajs.use('./js/main');
+    </script>
+</body>
+</html>

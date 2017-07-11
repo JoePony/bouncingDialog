@@ -1,0 +1,1 @@
+define(function(require,exports,module){module.exports=function(){function isBlank(text){return/^\s*$/.test(text)}function htmlEscape(text){return text.replace(/[<>'"&]/g,function(matchChar){switch(matchChar){case"<":return"&lt;";case">":return"&gt;";case"&":return"&amp;";case"'":case'"':return"&quot;"}})}return{isBlank:isBlank,htmlEscape:htmlEscape}}()});
